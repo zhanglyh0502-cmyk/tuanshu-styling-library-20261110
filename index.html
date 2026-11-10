@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:,">
+  <meta name="description" content="按年份、类别、颜色和风格查找团播妆造参考，浏览原图、下载与查看来源笔记。">
+  <title>团播妆造素材库</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#materials">跳到素材</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand"><h1>团播妆造素材库</h1><p>妆面、发型与服装参考</p></div>
+      <div class="header-actions"><span class="readonly-label">只读共享</span><button id="themeButton" class="quiet-button" type="button">外观：跟随系统</button></div>
+    </div>
+  </header>
+  <div class="app-shell">
+    <aside class="filter-sidebar" aria-label="筛选素材">
+      <div class="filter-heading"><h2>筛选素材</h2><button id="mobileFilters" class="quiet-button" type="button" aria-expanded="false" aria-controls="filterContent">展开筛选</button></div>
+      <div id="filterContent" class="filter-content">
+        <fieldset><legend>发布年份</legend><div id="yearFilters" class="filter-options"></div></fieldset>
+        <fieldset><legend>素材类别</legend><div id="categoryFilters" class="filter-options"></div></fieldset>
+        <fieldset><legend>颜色</legend><div id="colorFilters" class="color-options"></div></fieldset>
+        <fieldset><legend>风格</legend><div id="styleFilters" class="filter-options"></div></fieldset>
+        <button id="clearFilters" class="reset-button" type="button">清空筛选</button>
+        <p class="filter-help">可同时选择多个条件，同组条件匹配任意一项。</p>
+      </div>
+    </aside>
+    <main id="materials" tabindex="-1">
+      <div class="workspace-heading"><div><h2 id="resultsHeading">全部素材</h2><p id="resultCount" class="result-count" role="status" aria-live="polite">正在读取素材目录</p></div><div class="view-switch" role="group" aria-label="展示方式"><button id="wallView" type="button" aria-pressed="true">图片墙</button><button id="cardView" type="button" aria-pressed="false">笔记卡片</button></div></div>
+      <div class="search-toolbar"><div class="search-field"><label for="searchInput">搜索素材</label><input id="searchInput" type="search" placeholder="标题、来源账号、场景或笔记内容" autocomplete="off"></div><div class="sort-field"><label for="sortInput">排序</label><select id="sortInput"><option value="newest">发布由近到远</option><option value="oldest">发布由远到近</option></select></div></div>
+      <div id="activeFilters" class="active-filters" aria-label="已选条件" hidden></div>
+      <section id="gallery" class="gallery wall loading" aria-label="素材图片" aria-busy="true"><div class="skeleton"><div></div><i></i><i></i></div><div class="skeleton"><div></div><i></i><i></i></div><div class="skeleton"><div></div><i></i><i></i></div><div class="skeleton"><div></div><i></i><i></i></div></section>
+      <div id="moreRow" class="more-row" hidden><p id="loadStatus"></p><button id="loadMore" class="button" type="button">继续浏览</button></div>
+      <section id="emptyState" class="message-state" hidden><p class="message-label">没有匹配的素材</p><h3>换个条件，继续找灵感。</h3><p>试试减少颜色或风格条件，或清空搜索词。</p><button id="emptyReset" class="button primary" type="button">查看全部素材</button></section>
+      <section id="errorState" class="message-state" hidden><p class="message-label">素材目录暂未加载</p><h3>请稍后重试。</h3><p id="errorMessage">网络可能暂时不可用。</p><button id="retryButton" class="button primary" type="button">重新加载</button></section>
+      <footer class="library-footer"><p id="librarySummary">素材来源：小红书</p><p>图片来源待核的记录会保留标记。笔记发布日期不代表图片拍摄日期。</p></footer>
+    </main>
+  </div>
+  <dialog id="detailDialog" class="detail-dialog" aria-labelledby="dialogTitle">
+    <div class="dialog-header"><div><p id="dialogEyebrow" class="dialog-eyebrow"></p><h2 id="dialogTitle"></h2></div><button id="closeDialog" class="close-button" type="button" autofocus aria-label="关闭详情">关闭</button></div>
+    <section id="imagePanel" class="image-panel">
+      <div class="image-stage"><button id="previousImage" class="image-nav" type="button" aria-label="上一张图片">←</button><div id="imageViewport" class="image-viewport"><img id="fullImage" alt=""></div><button id="nextImage" class="image-nav" type="button" aria-label="下一张图片">→</button></div>
+      <div class="image-caption"><p id="imageCounter"></p><p id="imageSourceStatus"></p></div>
+      <p id="imageLoadError" class="image-load-error" role="status" hidden>这张图片暂时无法显示，请稍后重新打开，或尝试下载原图。</p>
+      <div class="viewer-actions"><a id="downloadImage" class="button primary" download>下载原图</a><button id="showNote" class="button" type="button">笔记详情</button><a id="directNoteLink" class="button" target="_blank" rel="noopener noreferrer">打开原文</a><button id="zoomButton" class="quiet-button" type="button" aria-pressed="false">原尺寸</button></div>
+      <p class="viewer-hint">左右方向键切换本篇图片，Esc 关闭。</p>
+    </section>
+    <section id="notePanel" class="note-panel" hidden><div class="note-actions"><button id="backToImages" class="button" type="button">查看图片</button><a id="noteLink" class="button primary" target="_blank" rel="noopener noreferrer">打开原笔记</a><a id="authorLink" class="button" target="_blank" rel="noopener noreferrer">作者主页</a></div><dl id="noteMeta" class="note-meta"></dl><div id="noteTags" class="note-tags"></div><section id="noteSummarySection" class="note-section"><h3>妆造要点</h3><p id="noteSummary"></p></section><section class="note-section"><h3>原文存档</h3><p id="noteFullText"></p></section><section class="note-section"><h3>本篇图片</h3><div id="noteThumbnails" class="note-thumbnails"></div></section></section>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
