@@ -23,6 +23,22 @@
   const fullDate = date => date ? date.replaceAll('-', '.') : '日期未核实';
   const fileName = (entry, image) => `${entry.title.replace(/[\\/:*?"<>|\u0000-\u001f]/g, '_').slice(0, 48) || '妆造参考'}_${image.id.slice(-2)}${isPending(image) ? '_来源待核' : ''}.${image.original.split('.').pop()}`;
 
+  const verifiedSearches = new Map([
+    ["6afe202f0000000025011bb7", "带着笼子到处飞的鸟"],
+    ["6afe54f1000000002a01abce", "成都礼服租赁｜成都团播造型来啦"],
+    ["6afe6fed000000002a028a54", "羽绒服卡卡"],
+    ["6afd1100000000002a012f2c", "今儿个这个妆造可以吗"]
+  ]);
+  function originalSearchUrl(entry) {
+    const query = verifiedSearches.get(entry.id);
+    if (!query) return '';
+    const url = new URL("https://www.xiaohongshu.com/search_result");
+    // 保留小红书网页搜索使用的两层关键词编码。
+    url.searchParams.set("keyword", encodeURIComponent(query));
+    url.searchParams.set("source", "web_search_result_notes");
+    return url.href;
+  }
+
   function safeNoteUrl(value, author = false) {
     if (typeof value !== 'string' || !value) return '';
     try {
@@ -134,9 +150,11 @@
   }
 
   function cardMarkup(entry, position) {
+    const searchUrl = originalSearchUrl(entry);
+    const searchLink = searchUrl ? `<a class="card-original" href="${esc(searchUrl)}" target="_blank" rel="noopener noreferrer">站内找原帖 ↗</a>` : '';
     const pendingCount = entry.images.filter(isPending).length;
     const tags = [...entry.styles.slice(0,3),...entry.colors.slice(0,2)].map(tag => `<span class="text-tag">${esc(tag)}</span>`).join('');
-    return `<article class="note-card">${imageMarkup(entry,entry.images[0],0,position === 0)}<div class="note-card-body"><div class="card-meta"><span>${esc(entry.category)} / ${fullDate(entry.publishedAt)}</span><span>${entry.images.length} 张图</span></div><button class="image-title card-title" type="button" data-action="note" data-entry="${entry.id}">${esc(entry.title)}</button>${entry.scene ? `<p class="card-description">${esc(entry.scene)}</p>` : ''}<div class="card-tag-row">${tags}</div>${pendingCount ? `<p class="source-pending">${pendingCount} 张图片来源待核</p>` : ''}<div class="card-bottom"><span class="card-account">${esc(entry.sourceAccount || '来源账号未记录')}</span><a class="card-original" href="${esc(safeNoteUrl(entry.link))}" target="_blank" rel="noopener noreferrer" aria-label="打开原文：${esc(entry.title)}" aria-describedby="card-original-hint-${entry.id}">打开原文 ↗</a></div><p id="card-original-hint-${entry.id}" class="original-link-hint card-original-hint">如果小红书原帖打不开，可以在「<button class="card-note-link" type="button" data-action="note" data-entry="${entry.id}">笔记详情</button>」里看原文存档。</p></div></article>`;
+    return `<article class="note-card">${imageMarkup(entry,entry.images[0],0,position === 0)}<div class="note-card-body"><div class="card-meta"><span>${esc(entry.category)} / ${fullDate(entry.publishedAt)}</span><span>${entry.images.length} 张图</span></div><button class="image-title card-title" type="button" data-action="note" data-entry="${entry.id}">${esc(entry.title)}</button>${entry.scene ? `<p class="card-description">${esc(entry.scene)}</p>` : ''}<div class="card-tag-row">${tags}</div>${pendingCount ? `<p class="source-pending">${pendingCount} 张图片来源待核</p>` : ''}<div class="card-bottom"><span class="card-account">${esc(entry.sourceAccount || '来源账号未记录')}</span><a class="card-original" href="${esc(safeNoteUrl(entry.link))}" target="_blank" rel="noopener noreferrer" aria-label="打开原文：${esc(entry.title)}" aria-describedby="card-original-hint-${entry.id}">打开原文 ↗</a>${searchLink}</div><p id="card-original-hint-${entry.id}" class="original-link-hint card-original-hint">如果小红书原帖打不开，可以在「<button class="card-note-link" type="button" data-action="note" data-entry="${entry.id}">笔记详情</button>」里看原文存档。</p></div></article>`;
   }
 
   function appendBatch() {
@@ -218,6 +236,7 @@
 
   function setLink(id, value) {
     const link = $(id);
+    if (!link) return;
     link.hidden = !value;
     if (value) link.href = value;
     else link.removeAttribute('href');
@@ -233,6 +252,9 @@
     $('notePanel').hidden = state.detail.mode !== 'note';
     setLink('directNoteLink', safeNoteUrl(entry.link));
     setLink('noteLink', safeNoteUrl(entry.link));
+    const searchUrl = originalSearchUrl(entry);
+    setLink('imageSearchLink', searchUrl);
+    setLink('noteSearchLink', searchUrl);
     setLink('authorLink', safeNoteUrl(entry.authorLink, true));
     if (state.detail.mode === 'note') {
       renderNote(entry);
