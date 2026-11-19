@@ -47,7 +47,9 @@
       <div class="image-stage"><button id="previousImage" class="image-nav" type="button" aria-label="上一张图片">←</button><div id="imageViewport" class="image-viewport"><img id="fullImage" alt=""></div><button id="nextImage" class="image-nav" type="button" aria-label="下一张图片">→</button></div>
       <div class="image-caption"><p id="imageCounter"></p><p id="imageSourceStatus"></p></div>
       <p id="imageLoadError" class="image-load-error" role="status" hidden>这张图片暂时无法显示，请稍后重新打开，或尝试下载原图。</p>
-      <div class="viewer-actions"><a id="downloadImage" class="button primary" download>下载原图</a><button id="showNote" class="button" type="button">笔记详情</button><a id="directNoteLink" class="button" target="_blank" rel="noopener noreferrer">打开原文</a><button id="zoomButton" class="quiet-button" type="button" aria-pressed="false">原尺寸</button></div>
+      <div class="viewer-actions"><a id="downloadImage" class="button primary" download>下载原图</a><button id="showNote" class="button" type="button">笔记详情</button><a id="directNoteLink" class="button" target="_blank" rel="noopener noreferrer" aria-describedby="imageOriginalHint">打开原文</a><button id="zoomButton" class="quiet-button" type="button" aria-pressed="false">原尺寸</button>
+        <p id="imageOriginalHint" class="original-link-hint">如果小红书原帖打不开，可以在「笔记详情」里看原文存档。</p>
+      </div>
       <p class="viewer-hint">左右方向键切换本篇图片，Esc 关闭。</p>
     </section>
     <section id="notePanel" class="note-panel" hidden><div class="note-actions"><button id="backToImages" class="button" type="button">查看图片</button><a id="noteLink" class="button primary" target="_blank" rel="noopener noreferrer">打开原笔记</a><a id="authorLink" class="button" target="_blank" rel="noopener noreferrer">作者主页</a></div><dl id="noteMeta" class="note-meta"></dl><div id="noteTags" class="note-tags"></div><section id="noteSummarySection" class="note-section"><h3>妆造要点</h3><p id="noteSummary"></p></section><section class="note-section"><h3>原文存档</h3><p id="noteFullText"></p></section><section class="note-section"><h3>本篇图片</h3><div id="noteThumbnails" class="note-thumbnails"></div></section></section>
