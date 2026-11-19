@@ -47,11 +47,13 @@
     ["6af45f1d0000000023011c03", "GF女团 白雪公主 妆容改造"],
     ["6af301670000000025009217", "好特别的小刘海 sk卡莎"],
     ["6af53304000000001603d37c", "团播半扎发型上镜妆 甜美妆容 韩系女团风"],
-    ["6af53359000000002a00c4d2", "哪个服装更好看呢团播主播 ws女团"]
+    ["6af53359000000002a00c4d2", "哪个服装更好看呢团播主播 ws女团"],
+    ["6afa74810000000025013001", "https://www.xiaohongshu.com/user/profile/62e13f45000000001501dfca"]
   ]);
   function originalSearchUrl(entry) {
     const query = verifiedSearches.get(entry.id);
     if (!query) return '';
+    if (/^https:\/\/www\.xiaohongshu\.com\/user\/profile\/[a-f0-9]{24}$/.test(query)) return query;
     const url = new URL("https://www.xiaohongshu.com/search_result");
     // 保留小红书网页搜索使用的两层关键词编码。
     url.searchParams.set("keyword", encodeURIComponent(query));
