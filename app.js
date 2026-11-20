@@ -48,7 +48,9 @@
     ["6af301670000000025009217", "好特别的小刘海 sk卡莎"],
     ["6af53304000000001603d37c", "团播半扎发型上镜妆 甜美妆容 韩系女团风"],
     ["6af53359000000002a00c4d2", "哪个服装更好看呢团播主播 ws女团"],
-    ["6afa74810000000025013001", "https://www.xiaohongshu.com/user/profile/62e13f45000000001501dfca"]
+    ["6afa74810000000025013001", "https://www.xiaohongshu.com/user/profile/62e13f45000000001501dfca"],
+    ["6ae5ff5b000000001200989b", "https://www.xiaohongshu.com/user/profile/6482ba90000000001001ee7b"],
+    ["6adb252b000000002d005d29", "sk限定团三团今日妆造 来到紫色系"]
   ]);
   function originalSearchUrl(entry) {
     const query = verifiedSearches.get(entry.id);
